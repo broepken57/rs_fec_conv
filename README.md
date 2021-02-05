@@ -46,36 +46,36 @@ The function conv_encoder_rs can be implemented
 ```bash
 import numpy as np
 import matplotlib.pyplot as plt
-import sk_dsp_comm.rs_fec_conv as rs_fec
+from sk_dsp_comm import fec_conv
 
 # Generate random data
 N = 20
-x = randint(0,2,N)
+x = np.random.randint(0, 2, N)
 
 # Initialize fec_conv object with either G length 2 or 3
-G =('111','101')
+G = ('111', '101')
 # G = ('11110111','11011001','10010101')
-cc1 = rs_fec.fec_conv(G,10)
+cc1 = fec_conv.fec_conv(G, 10)
 state = '00'
 
 # Convolutionally Encode Signal
-y,state = cc1.conv_encoder(x,state)
+y, state = cc1.conv_encoder(x, state)
 
 # Plot input signal
-subplot(211)
-stem(x)
-xlabel('Number of Samples')
-ylabel('x')
-title('Input Signal')
+plt.subplot(211)
+plt.stem(x)
+plt.xlabel('Number of Samples')
+plt.ylabel('x')
+plt.title('Input Signal')
 
 # Plot convolutionally encoded signal
-subplot(212)
-stem(y)
-xlabel('Number of Samples')
-ylabel('y')
-title('Convolutionally Encoded Signal')
-tight_layout()
-savefig('conv_enc.png')
+plt.subplot(212)
+plt.stem(y)
+plt.xlabel('Number of Samples')
+plt.ylabel('y')
+plt.title('Convolutionally Encoded Signal')
+plt.tight_layout()
+plt.savefig('conv_enc.png')
 ```
 
 ![Convolutionally Encoded Signal](https://github.com/grayfox57/rs_fec_conv/blob/master/conv_enc.png)
@@ -83,26 +83,42 @@ savefig('conv_enc.png')
 ### Viterbi Decoder
 The function viterbi_decoder_rs can be implemented by
 ```bash
+import numpy as np
+import matplotlib.pyplot as plt
+from sk_dsp_comm import fec_conv
+
+# Generate random data
+N = 20
+x = np.random.randint(0, 2, N)
+
+# Initialize fec_conv object with either G length 2 or 3
+G = ('111', '101')
+# G = ('11110111','11011001','10010101')
+cc1 = fec_conv.fec_conv(G, 10)
+state = '00'
+
+y, state = cc1.conv_encoder(x, state)
+
 # Viterbi decode
 z = cc1.viterbi_decoder(y.astype(int), 'hard', 3)
 
 # Plot input signal
-subplot(211)
-stem(x[:11])
-xlabel('Number of Samples')
-ylabel('x')
-title('Input Signal')
-xlim([0,10])
+plt.subplot(211)
+plt.stem(x[:11])
+plt.xlabel('Number of Samples')
+plt.ylabel('x')
+plt.title('Input Signal')
+plt.xlim([0, 10])
 
 # Plot viterbi decoded signal
-subplot(212)
-stem(z)
-xlabel('Number of Samples')
-ylabel('z')
-title('Viterbi decoded Signal')
-xlim([0,10])
-tight_layout()
-savefig('viterbi_dec.png')
+plt.subplot(212)
+plt.stem(z)
+plt.xlabel('Number of Samples')
+plt.ylabel('z')
+plt.title('Viterbi decoded Signal')
+plt.xlim([0, 10])
+plt.tight_layout()
+plt.savefig('viterbi_dec.png')
 ```
 
 ![Viterbi Decoded Signal](https://github.com/grayfox57/rs_fec_conv/blob/master/viterbi_dec.png)
@@ -151,9 +167,5 @@ print('Bits Received = %d, Bit errors = %d, BEP = %1.2e' %\
 Rate 1/2 Object
 
 kmax =  0, taumax = 0
-
-Bits Received = 99976, Bit errors = 845, BEP = 8.45e-03
-
-*****************************************************
 
 Bits Received = 99976, Bit errors = 845, BEP = 8.45e-03
